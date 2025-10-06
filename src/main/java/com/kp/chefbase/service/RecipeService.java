@@ -37,6 +37,8 @@ public class RecipeService {
         if (recipe != null) {
             recipe.setName(recipeDetails.getName());
             recipe.setDescription(recipeDetails.getDescription());
+            recipe.setImage(recipeDetails.getImage());
+            recipe.setTotalTime(recipeDetails.getTotalTime());
             recipe.setCategory(recipeDetails.getCategory());
             recipe.setSteps(recipeDetails.getSteps());
 
