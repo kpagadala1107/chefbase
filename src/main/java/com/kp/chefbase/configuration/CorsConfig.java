@@ -17,8 +17,7 @@ public class CorsConfig {
         CorsConfiguration config = new CorsConfiguration();
         
         // Allow your React app's origin
-        config.setAllowedOrigins(List.of("http://localhost:3000","https://your-react-app.netlify.app",
-                "https://your-react-app.vercel.app"));
+        config.setAllowedOrigins(List.of("http://localhost:3000","https://animated-buttercream-5c8fc2.netlify.app/"));
         
         // Allow all needed methods
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
