@@ -12,6 +12,7 @@ public class Recipe {
     private String name;
     private String description;
     private String category;
+    private String image;
     private int totalTime; // in minutes
     private String dietaryInfo; // e.g., Vegan, Gluten-Free
     private List<Step> steps;
@@ -46,6 +47,14 @@ public class Recipe {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String imageUrl) {
+        this.image = image;
     }
 
     public int getTotalTime() {
