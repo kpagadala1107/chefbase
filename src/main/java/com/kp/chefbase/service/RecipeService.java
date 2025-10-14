@@ -1,21 +1,18 @@
 package com.kp.chefbase.service;
 
 import com.kp.chefbase.model.Recipe;
-import com.kp.chefbase.model.User;
 import com.kp.chefbase.repository.RecipeRepository;
-import com.kp.chefbase.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RecipeService {
     private final RecipeRepository recipeRepository;
-    private final UserRepository userRepository;
 
-    public RecipeService(RecipeRepository recipeRepository, UserRepository userRepository) {
+    public RecipeService(RecipeRepository recipeRepository) {
         this.recipeRepository = recipeRepository;
-        this.userRepository = userRepository;
     }
 
     public List<Recipe> getAllRecipes() {
@@ -27,27 +24,36 @@ public class RecipeService {
     }
 
     public Recipe createRecipe(Recipe recipe) {
-    	List<User> users = userRepository.findByAlertsForCategoriesContaining(recipe.getCategory());
-    	System.out.println(users);
         return recipeRepository.save(recipe);
     }
 
-    public Recipe updateRecipe(String id, Recipe recipeDetails) {
-        Recipe recipe = recipeRepository.findById(id).orElse(null);
-        if (recipe != null) {
+    public Recipe updateRecipe(String id, Recipe recipeDetails, String userId) {
+        Optional<Recipe> existingRecipe = recipeRepository.findById(id);
+        if (existingRecipe.isPresent()) {
+            Recipe recipe = existingRecipe.get();
+            if (!recipe.getUserId().equals(userId)) {
+                throw new SecurityException("Not authorized to update this recipe");
+            }
             recipe.setName(recipeDetails.getName());
+            recipe.setCategory(recipeDetails.getCategory());
             recipe.setDescription(recipeDetails.getDescription());
             recipe.setImage(recipeDetails.getImage());
             recipe.setTotalTime(recipeDetails.getTotalTime());
-            recipe.setCategory(recipeDetails.getCategory());
+            recipe.setDietaryInfo(recipeDetails.getDietaryInfo());
             recipe.setSteps(recipeDetails.getSteps());
-
             return recipeRepository.save(recipe);
         }
         return null;
     }
 
-    public void deleteRecipe(String id) {
+    public void deleteRecipe(String id, String userId) {
+        Optional<Recipe> existingRecipe = recipeRepository.findById(id);
+        if (existingRecipe.isPresent()) {
+            Recipe recipe = existingRecipe.get();
+            if (!recipe.getUserId().equals(userId)) {
+                throw new SecurityException("Not authorized to delete this recipe");
+            }
+        }
         recipeRepository.deleteById(id);
     }
 
@@ -55,7 +61,8 @@ public class RecipeService {
         return recipeRepository.findByCategory(category);
     }
 
-//    public List<Recipe> getRecipesByStatus(Recipe.Status status) {
-//        return recipeRepository.findByStatus(status);
-//    }
+    public List<Recipe> getRecipesByUserId(String id) {
+        return recipeRepository.findByUserId(id);
+    }
+
 }

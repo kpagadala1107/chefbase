@@ -2,8 +2,10 @@ package com.kp.chefbase.rest;
 
 import com.kp.chefbase.exception.RecipeNotFoundException;
 import com.kp.chefbase.model.Recipe;
+import com.kp.chefbase.model.User;
 import com.kp.chefbase.service.RecipeService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,14 +34,23 @@ public class RecipeController {
         }
     }
 
+    @GetMapping("/user")
+    public List<Recipe> getRecipesByUserId(Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        return recipeService.getRecipesByUserId(user.getId());
+    }
+
     @PostMapping
-    public Recipe createRecipe(@RequestBody Recipe recipe) {
+    public Recipe createRecipe(@RequestBody Recipe recipe, Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        recipe.setUserId(user.getId());
         return recipeService.createRecipe(recipe);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Recipe> updateRecipe(@PathVariable String id, @RequestBody Recipe recipeDetails) {
-        Recipe updatedRecipe = recipeService.updateRecipe(id, recipeDetails);
+    public ResponseEntity<Recipe> updateRecipe(@PathVariable String id, @RequestBody Recipe recipeDetails, Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        Recipe updatedRecipe = recipeService.updateRecipe(id, recipeDetails, user.getId());
         if (updatedRecipe != null) {
             return ResponseEntity.ok(updatedRecipe);
         }
@@ -47,8 +58,9 @@ public class RecipeController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteRecipe(@PathVariable String id) {
-        recipeService.deleteRecipe(id);
+    public ResponseEntity<Void> deleteRecipe(@PathVariable String id, Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        recipeService.deleteRecipe(id, user.getId());
         return ResponseEntity.noContent().build();
     }
 
@@ -56,9 +68,4 @@ public class RecipeController {
     public List<Recipe> getRecipesByCategory(@PathVariable String category) {
         return recipeService.getRecipesByCategory(category);
     }
-
-//    @GetMapping("/status/{status}")
-//    public List<Recipe> getRecipesByStatus(@PathVariable Recipe.Status status) {
-//        return recipeService.getRecipesByStatus(status);
-//    }
 }

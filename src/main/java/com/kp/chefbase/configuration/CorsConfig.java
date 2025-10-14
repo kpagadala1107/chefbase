@@ -15,22 +15,22 @@ public class CorsConfig {
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-        
+
         // Allow your React app's origin
-        config.setAllowedOrigins(List.of("http://localhost:3000","https://animated-buttercream-5c8fc2.netlify.app/","https://agent-68ea85805118d--animated-buttercream-5c8fc2.netlify.app/"));
-        
+        config.setAllowedOrigins(List.of("http://localhost:3000", "https://animated-buttercream-5c8fc2.netlify.app/", "https://agent-68ea85805118d--animated-buttercream-5c8fc2.netlify.app/"));
+
         // Allow all needed methods
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        
+
         // Allow all headers
         config.setAllowedHeaders(List.of("*"));
-        
+
         // Allow credentials if needed
         config.setAllowCredentials(true);
-        
+
         // Apply this configuration to all paths
         source.registerCorsConfiguration("/**", config);
-        
+
         return new CorsFilter(source);
     }
 }

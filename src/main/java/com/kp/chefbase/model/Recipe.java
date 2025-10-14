@@ -9,6 +9,7 @@ import java.util.List;
 public class Recipe {
     @Id
     private String id;
+    private String userId;
     private String name;
     private String description;
     private String category;
@@ -23,6 +24,14 @@ public class Recipe {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getName() {
@@ -85,6 +94,7 @@ public class Recipe {
     public String toString() {
         return "Recipe{" +
                 "id='" + id + '\'' +
+                ", userId='" + userId + '\'' +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", category='" + category + '\'' +
