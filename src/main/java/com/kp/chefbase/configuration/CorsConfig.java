@@ -16,17 +16,27 @@ public class CorsConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
 
-        // Allow your React app's origin
-        config.setAllowedOrigins(List.of("http://localhost:3000", "https://animated-buttercream-5c8fc2.netlify.app/", "https://agent-68ea85805118d--animated-buttercream-5c8fc2.netlify.app/"));
+        // Allow your React app's origin - removed trailing slashes and added more flexibility
+        config.setAllowedOrigins(List.of(
+            "http://localhost:3000",
+            "https://animated-buttercream-5c8fc2.netlify.app",
+            "https://agent-68ea85805118d--animated-buttercream-5c8fc2.netlify.app"
+        ));
 
-        // Allow all needed methods
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        // Allow all needed methods including OPTIONS for preflight
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
 
         // Allow all headers
         config.setAllowedHeaders(List.of("*"));
 
         // Allow credentials if needed
         config.setAllowCredentials(true);
+
+        // Expose common headers
+        config.setExposedHeaders(List.of("Authorization", "Content-Type"));
+
+        // Set max age for preflight cache
+        config.setMaxAge(3600L);
 
         // Apply this configuration to all paths
         source.registerCorsConfiguration("/**", config);
