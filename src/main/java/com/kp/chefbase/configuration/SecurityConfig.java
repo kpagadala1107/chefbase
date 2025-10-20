@@ -60,6 +60,7 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/images/upload").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/recipes", "/api/recipes/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/recipes/user").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/recipes", "/api/recipes/**").authenticated()
