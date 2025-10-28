@@ -27,6 +27,10 @@ public class RecipeService {
         return recipeRepository.save(recipe);
     }
 
+    public List<Recipe> createBulkRecipes(List<Recipe> recipes) {
+        return recipeRepository.saveAll(recipes);
+    }
+
     public Recipe updateRecipe(String id, Recipe recipeDetails, String userId) {
         Optional<Recipe> existingRecipe = recipeRepository.findById(id);
         if (existingRecipe.isPresent()) {

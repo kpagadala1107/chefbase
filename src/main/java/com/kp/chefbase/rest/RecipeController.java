@@ -47,6 +47,18 @@ public class RecipeController {
         return recipeService.createRecipe(recipe);
     }
 
+    @PostMapping("/list")
+    public List<Recipe> createBulkRecipes(@RequestBody List<Recipe> recipes, Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+
+        // Set userId for each recipe in the list
+        recipes.forEach(recipe -> recipe.setUserId(user.getId()));
+
+        // Save all recipes and return the list
+        return recipeService.createBulkRecipes(recipes);
+    }
+
+
     @PutMapping("/{id}")
     public ResponseEntity<Recipe> updateRecipe(@PathVariable String id, @RequestBody Recipe recipeDetails, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
