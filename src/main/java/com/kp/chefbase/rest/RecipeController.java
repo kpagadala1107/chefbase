@@ -3,6 +3,7 @@ package com.kp.chefbase.rest;
 import com.kp.chefbase.exception.RecipeNotFoundException;
 import com.kp.chefbase.model.Recipe;
 import com.kp.chefbase.model.User;
+import com.kp.chefbase.service.LLMService;
 import com.kp.chefbase.service.RecipeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -14,9 +15,11 @@ import java.util.List;
 @RequestMapping("/api/recipes")
 public class RecipeController {
     private final RecipeService recipeService;
+    private final LLMService llmService;
 
-    public RecipeController(RecipeService recipeService) {
+    public RecipeController(RecipeService recipeService, LLMService llmService) {
         this.recipeService = recipeService;
+        this.llmService = llmService;
     }
 
     @GetMapping
@@ -32,6 +35,25 @@ public class RecipeController {
         } else {
         	throw new RecipeNotFoundException("recipe with id - " + id + " not found");
         }
+    }
+
+    @GetMapping("/generate/{recipeName}")
+    public Recipe generateRecipe(@PathVariable String recipeName) {
+        // First, search for existing recipes in the database
+        List<Recipe> existingRecipes = recipeService.searchRecipesByName(recipeName);
+
+        if (!existingRecipes.isEmpty()) {
+            // Return the first matching recipe from database
+            return existingRecipes.get(0);
+        }
+
+        // If no existing recipe found, generate new one using LLM
+        Recipe generatedRecipe = llmService.generateRecipe(recipeName);
+
+        // Set userId as "AI-Generated" for LLM generated recipes
+        generatedRecipe.setUserId("AI-Generated");
+
+        return recipeService.createRecipe(generatedRecipe);
     }
 
     @GetMapping("/user")

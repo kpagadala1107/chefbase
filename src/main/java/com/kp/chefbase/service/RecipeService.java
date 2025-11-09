@@ -69,4 +69,10 @@ public class RecipeService {
         return recipeRepository.findByUserId(id);
     }
 
+    public List<Recipe> searchRecipesByName(String recipeName) {
+        // Search for recipes where name or description contains the search term (case-insensitive)
+        return recipeRepository.findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(recipeName, recipeName);
+    }
+
+
 }

@@ -74,6 +74,11 @@
 			<artifactId>azure-storage-blob</artifactId>
 			<version>12.25.0</version>
 		</dependency>
+		<dependency>
+			<groupId>com.theokanning.openai-gpt3-java</groupId>
+			<artifactId>service</artifactId>
+			<version>0.18.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
