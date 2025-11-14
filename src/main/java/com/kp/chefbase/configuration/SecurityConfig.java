@@ -41,7 +41,9 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(List.of(
             "http://localhost:3000",
             "https://animated-buttercream-5c8fc2.netlify.app",
-            "https://agent-68ea85805118d--animated-buttercream-5c8fc2.netlify.app"
+            "https://agent-68ea85805118d--animated-buttercream-5c8fc2.netlify.app",
+             "https://cochef-app.com",
+                "https://www.cochef-app.com"
         ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(List.of("*"));
