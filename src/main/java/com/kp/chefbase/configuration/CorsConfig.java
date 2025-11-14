@@ -20,7 +20,8 @@ public class CorsConfig {
         config.setAllowedOrigins(List.of(
             "http://localhost:3000",
             "https://animated-buttercream-5c8fc2.netlify.app",
-            "https://agent-68ea85805118d--animated-buttercream-5c8fc2.netlify.app"
+            "https://agent-68ea85805118d--animated-buttercream-5c8fc2.netlify.app",
+            "https://cochef-app.com"
         ));
 
         // Allow all needed methods including OPTIONS for preflight
