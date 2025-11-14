@@ -1,5 +1,6 @@
 package com.kp.chefbase.rest;
 
+import com.kp.chefbase.dto.RecipeSummary;
 import com.kp.chefbase.exception.RecipeNotFoundException;
 import com.kp.chefbase.model.Recipe;
 import com.kp.chefbase.model.User;
@@ -23,8 +24,8 @@ public class RecipeController {
     }
 
     @GetMapping
-    public List<Recipe> getAllRecipes() {
-        return recipeService.getAllRecipes();
+    public List<RecipeSummary> getAllRecipes() {
+        return recipeService.getAllRecipeSummaries();
     }
 
     @GetMapping("/{id}")
@@ -90,6 +91,35 @@ public class RecipeController {
         }
         return ResponseEntity.notFound().build();
     }
+
+    @PostMapping("/{id}/update-with-llm")
+    public ResponseEntity<Recipe> updateRecipeWithLLM(
+            @PathVariable String id,
+            @RequestBody String customInstructions,
+            Authentication authentication) {
+        Recipe updatedRecipe = recipeService.updateRecipeWithLLM(id, customInstructions);
+        if (updatedRecipe != null) {
+            return ResponseEntity.ok(updatedRecipe);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/top-viewed")
+    public List<Recipe> getTopViewedRecipes() {
+        return recipeService.getTopViewedRecipes();
+    }
+
+    @GetMapping("/today-latest")
+    public List<Recipe> getTodayLatestRecipes() {
+        return recipeService.getTodayLatestRecipes();
+    }
+
+
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<Void> deleteRecipe(@PathVariable String id) {
+//        recipeService.deleteRecipe(id, "user.getId()");
+//        return ResponseEntity.noContent().build();
+//    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteRecipe(@PathVariable String id, Authentication authentication) {
